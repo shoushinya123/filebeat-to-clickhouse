@@ -1,0 +1,48 @@
+filebeat.inputs:
+  - type: container
+    paths:
+      - '/var/lib/docker/containers/*/*.log'
+    json.keys_under_root: false
+    json.add_error_key: true
+    json.message_key: message
+    processors:
+      - add_docker_metadata:
+          host: "unix:///var/run/docker.sock"
+
+# 处理配置 - 确保输出为 JSON 格式
+processors:
+  - decode_json_fields:
+      fields: ["message"]
+      target: ""
+      overwrite_keys: true
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - add_docker_metadata: ~
+  # 添加字段映射，确保数据格式符合 ClickHouse 表结构
+  - rename:
+      fields:
+        - from: "@timestamp"
+          to: "timestamp"
+      fail_on_error: false
+      ignore_missing: true
+
+# 输出配置 - 输出到转换器（兼容 Elasticsearch API）
+# 转换器接收 Filebeat 输出并写入 ClickHouse
+output.elasticsearch:
+  enabled: true
+  hosts: ["http://filebeat-to-ck:8080"]
+  # 使用 bulk API
+  index: "filebeat-%{+yyyy.MM.dd}"
+  template.enabled: false
+  # 禁用索引管理
+  ilm.enabled: false
+
+# 日志配置
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat
+  keepfiles: 7
+  permissions: 0644
+

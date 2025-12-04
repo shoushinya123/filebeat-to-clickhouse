@@ -1,0 +1,55 @@
+server:
+  host: "0.0.0.0"
+  port: 8080
+
+clickhouse:
+  host: "clickhouse"
+  port: 8123
+  database: "logs"
+  table: "logs_table"
+  user: "default"
+  password: ""
+
+# 支持的输入源配置
+inputs:
+  # Elasticsearch bulk API (HTTP) - 已支持
+  elasticsearch:
+    enabled: true
+    port: 8080  # 使用主服务端口
+  
+  # Logstash Lumberjack/Beats protocol (TCP)
+  logstash:
+    enabled: false
+    port: 5044
+    protocol: "lumberjack"  # lumberjack 或 beats
+  
+  # Kafka consumer
+  kafka:
+    enabled: false
+    brokers: ["localhost:9092"]
+    topics: ["filebeat"]
+    group_id: "filebeat-to-ck"
+    auto_commit: true
+  
+  # Redis LIST/PUBSUB
+  redis:
+    enabled: false
+    address: "localhost:6379"
+    password: ""
+    mode: "list"  # list 或 pubsub
+    key: "filebeat:logs"  # LIST key 或 PUBSUB channel
+  
+  # File tail (读取文件)
+  file:
+    enabled: false
+    paths: ["/var/log/filebeat/*.log"]
+    follow: true
+  
+  # TCP/HTTP 直接接收 JSON
+  tcp:
+    enabled: false
+    port: 9000
+    format: "json"  # json 或 json_lines
+
+log_level: "info"
+

@@ -1,0 +1,60 @@
+# 操作系统文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE 文件
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 日志文件
+*.log
+logs/
+
+# Docker 相关
+docker-compose.override.yml
+*.env
+.env.local
+
+# 临时文件
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# 测试和验证文件（不上传）
+验证结果.md
+使用说明.md
+filebeat-clickhouse-direct.yml
+fluent-bit.conf
+docker-compose-fluentbit.yml
+docker-compose-vector.yml
+vector-clickhouse.yml
+start.sh
+build-and-start.sh
+
+# Go 相关
+filebeat-to-ck/vendor/
+filebeat-to-ck/*.exe
+filebeat-to-ck/*.exe~
+filebeat-to-ck/*.dll
+filebeat-to-ck/*.so
+filebeat-to-ck/*.dylib
+
+# 构建产物
+filebeat-to-ck/filebeat-to-ck
+filebeat-to-ck/dist/
+
+# 数据文件
+*.db
+*.sqlite
+clickhouse_data/
+filebeat_data/
+
