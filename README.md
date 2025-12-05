@@ -8,7 +8,7 @@
 - ✅ 支持 Filebeat 的 Logstash HTTP 输出
 - ✅ 支持直接 JSON 接收
 - ✅ 自动字段映射和转换
-- ✅ 使用 ClickHouse HTTP 接口（最保险的方式）
+- ✅ 使用 ClickHouse HTTP 接口
 - ✅ 单体实例，轻量级
 - ✅ Docker 容器化部署
 - ✅ 外置配置文件
