@@ -225,8 +225,10 @@ func loadConfig() error {
 	if config.Server.Port == 0 {
 		config.Server.Port = 8080
 	}
+	// 只在配置文件中没有设置时才使用默认值
+	// 默认值应该是 "localhost"（本地测试）或 "clickhouse"（Docker 网络）
 	if config.ClickHouse.Host == "" {
-		config.ClickHouse.Host = "clickhouse"
+		config.ClickHouse.Host = "localhost"  // 改为 localhost，适合本地测试
 	}
 	if config.ClickHouse.Port == 0 {
 		config.ClickHouse.Port = 8123
@@ -438,6 +440,11 @@ func writeToClickHouse(events []FilebeatEvent) error {
 		return nil
 	}
 
+	// 调试：打印实际使用的 ClickHouse 地址和认证信息
+	log.Printf("🔍 准备写入 ClickHouse: %s:%d, 用户: %s, 密码长度: %d", 
+		config.ClickHouse.Host, config.ClickHouse.Port, 
+		config.ClickHouse.User, len(config.ClickHouse.Password))
+
 	// 构建 JSONEachRow 格式的数据
 	var jsonLines []string
 	for _, event := range events {
@@ -524,9 +531,15 @@ func writeToClickHouse(events []FilebeatEvent) error {
 	// ClickHouse JSONEachRow 格式不需要特定的 Content-Type
 	// 但设置一个通用的类型有助于识别
 	req.Header.Set("Content-Type", "application/x-ndjson")
-	if config.ClickHouse.User != "" {
-		req.SetBasicAuth(config.ClickHouse.User, config.ClickHouse.Password)
+	// ClickHouse HTTP 接口认证
+	// 新版本 ClickHouse 通常需要认证，即使密码为空也要设置用户
+	user := config.ClickHouse.User
+	if user == "" {
+		user = "default"
 	}
+	password := config.ClickHouse.Password
+	// 即使密码为空，也设置 Basic Auth（某些 ClickHouse 版本需要）
+	req.SetBasicAuth(user, password)
 
 	client := &http.Client{Timeout: 30 * time.Second}
 	resp, err := client.Do(req)

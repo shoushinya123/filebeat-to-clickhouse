@@ -1,14 +1,14 @@
 server:
   host: "0.0.0.0"
-  port: 8080
+  port: 9090
 
 clickhouse:
-  host: "clickhouse"
+  host: "localhost"
   port: 8123
   database: "logs"
   table: "logs_table"
   user: "default"
-  password: ""
+  password: "shaoxinye123"
 
 # 支持的输入源配置
 inputs:

@@ -5,10 +5,10 @@ go 1.21
 require (
 	github.com/gin-gonic/gin v1.9.1
 	gopkg.in/yaml.v3 v3.0.1
-	// 可选依赖（需要时取消注释）
-	// github.com/segmentio/kafka-go v0.4.47
-	// github.com/go-redis/redis/v8 v8.11.5
-	// github.com/fsnotify/fsnotify v1.7.0
+// 可选依赖（需要时取消注释）
+// github.com/segmentio/kafka-go v0.4.47
+// github.com/go-redis/redis/v8 v8.11.5
+// github.com/fsnotify/fsnotify v1.7.0
 )
 
 require (
@@ -36,4 +36,3 @@ require (
 	golang.org/x/text v0.9.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 )
-
